@@ -1,0 +1,27 @@
+databases:
+  - name: neondb
+    plan: external
+    databaseName: neondb
+    user: neondb_owner
+
+services:
+  - type: web
+    name: astec-spaceclub
+    runtime: python
+    region: ohio
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "cd spaceclub && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_M5b3kQTHNYIv@ep-icy-art-aniz3ry8-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"
+      - key: PYTHON_VERSION
+        value: "3.13.0"
