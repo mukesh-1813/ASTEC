@@ -1,0 +1,58 @@
+{% load i18n %}
+<button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar"
+    aria-label="{% translate 'Toggle navigation' %}"></button>
+<nav class="sticky" id="nav-sidebar">
+    <div class="sidebar-header"
+        style="padding: 20px 15px; border-bottom: 1px solid var(--border-color); text-align: center;">
+        <i class="fas fa-user-astronaut"
+            style="font-size: 36px; color: var(--primary); margin-bottom: 10px; display: block;"></i>
+        <h3 style="color: var(--body-loud-color); margin: 0; font-size: 16px;">Space Club</h3>
+    </div>
+
+    <ul class="nav-links" style="list-style: none; padding: 0; margin: 15px 0;">
+        <li style="margin-bottom: 5px;">
+            <a href="{% url 'admin:index' %}"
+                style="display: block; padding: 10px 20px; color: var(--body-fg); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;">
+                <i class="fas fa-home" style="width: 25px; color: var(--primary);"></i> Dashboard
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            <a href="{% url 'admin:magazines_magazine_changelist' %}"
+                style="display: block; padding: 10px 20px; color: var(--body-fg); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;">
+                <i class="fas fa-book" style="width: 25px; color: #8b5cf6;"></i> Magazines
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            <a href="{% url 'admin:events_event_changelist' %}"
+                style="display: block; padding: 10px 20px; color: var(--body-fg); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;">
+                <i class="fas fa-calendar" style="width: 25px; color: #f59e0b;"></i> Events
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            <a href="{% url 'admin:events_eventregistration_changelist' %}"
+                style="display: block; padding: 10px 20px; color: var(--body-fg); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;">
+                <i class="fas fa-ticket-alt" style="width: 25px; color: #10b981;"></i> Registrations
+            </a>
+        </li>
+        <li style="margin-bottom: 5px;">
+            <a href="{% url 'admin:core_contribution_changelist' %}"
+                style="display: block; padding: 10px 20px; color: var(--body-fg); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;">
+                <i class="fas fa-star" style="width: 25px; color: #ec4899;"></i> Contributions
+            </a>
+        </li>
+        <li style="margin-bottom: 5px; border-top: 1px solid var(--border-color); margin-top: 15px; padding-top: 15px;">
+            <a href="{% url 'admin:auth_user_changelist' %}"
+                style="display: block; padding: 10px 20px; color: var(--body-fg); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s;">
+                <i class="fas fa-users-cog" style="width: 25px; color: var(--body-quiet-color);"></i> Access Control
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<style>
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-left-color: var(--primary) !important;
+        color: var(--body-loud-color) !important;
+    }
+</style>

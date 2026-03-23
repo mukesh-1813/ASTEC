@@ -1,0 +1,89 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_dashboard_tags %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <!-- Custom Dashboard Cards -->
+    {% get_dashboard_stats as stats %}
+    <div class="dashboard-cards">
+        <div class="card card-magazines">
+            <div class="card-icon"><i class="fas fa-book-open"></i></div>
+            <div class="card-content">
+                <h3>Magazines</h3>
+                <p class="count">{{ stats.magazines_count }}</p>
+                <a href="{% url 'admin:magazines_magazine_changelist' %}">Manage <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="card card-events">
+            <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="card-content">
+                <h3>Events</h3>
+                <p class="count">{{ stats.events_count }}</p>
+                <a href="{% url 'admin:events_event_changelist' %}">Manage <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="card card-registrations">
+            <div class="card-icon"><i class="fas fa-users"></i></div>
+            <div class="card-content">
+                <h3>Registrations</h3>
+                <p class="count">{{ stats.registrations_count }}</p>
+                <a href="{% url 'admin:events_eventregistration_changelist' %}">Manage <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="card card-contributions">
+            <div class="card-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <div class="card-content">
+                <h3>Contributions</h3>
+                <p class="count">{{ stats.contributions_count }}</p>
+                <a href="{% url 'admin:core_contribution_changelist' %}">Manage <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Default App List underneath dashboard cards -->
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>{% translate 'Recent actions' %}</h2>
+        <h3>{% translate 'My actions' %}</h3>
+        {% load log %}
+        {% get_admin_log 10 as admin_log for_user user %}
+        {% if not admin_log %}
+        <p>{% translate 'None available' %}</p>
+        {% else %}
+        <ul class="actionlist">
+            {% for entry in admin_log %}
+            <li
+                class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                {{ entry.object_repr }}
+                {% else %}
+                <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                {% endif %}
+                <br>
+                {% if entry.content_type %}
+                <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                {% else %}
+                <span class="mini quiet">{% translate 'Unknown content' %}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

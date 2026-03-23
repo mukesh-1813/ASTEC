@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <i class="fas fa-satellite" style="color: #60a5fa; font-size: 24px; margin-right: 10px;"></i>
+        {{ site_header|default:_('Django administration') }}
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+<!-- Removed global nav to use sidebar -->
+{% endblock %}
+
+{% block userlinks %}
+{% if site_url %}
+<a href="{{ site_url }}" target="_blank"><i class="fas fa-external-link-alt"></i> View site</a> /
+{% endif %}
+{% if user.is_active and user.is_staff %}
+{% url 'django-admindocs-docroot' as docsroot %}
+{% if docsroot %}
+<a href="{{ docsroot }}">Documentation</a> /
+{% endif %}
+{% endif %}
+{% if user.has_usable_password %}
+<a href="{% url 'admin:password_change' %}">Change password</a> /
+{% endif %}
+<a href="{% url 'admin:logout' %}">Log out</a>
+{% endblock %}

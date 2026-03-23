@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ magazine.title }} - ASTEC Space Club{% endblock %}
+
+{% block content %}
+<section class="py-12 relative z-10 flex-grow flex flex-col">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <!-- Breadcrumb / Back Navigation -->
+        <div class="mb-8">
+            <a href="{% url 'magazines:list' %}"
+                class="text-gray-400 hover:text-white transition flex items-center gap-2 w-fit">
+                <i class="fa-solid fa-arrow-left"></i> Back to Magazines
+            </a>
+        </div>
+
+        <div
+            class="glass-card rounded-3xl p-6 md:p-10 mb-8 flex flex-col md:flex-row gap-8 items-start relative overflow-hidden">
+            <!-- decorative background elements -->
+            <div
+                class="absolute -top-32 -right-32 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl mix-blend-screen pointer-events-none">
+            </div>
+
+            <!-- Cover Image -->
+            <div class="w-full md:w-1/3 shrink-0">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-700/50 aspect-[3/4]">
+                    {% if magazine.cover_image %}
+                    <img src="{{ magazine.cover_image.url }}" alt="{{ magazine.title }}"
+                        class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full bg-space-800 flex items-center justify-center">
+                        <i class="fa-solid fa-book text-6xl text-gray-600"></i>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="w-full md:w-2/3 flex flex-col justify-center">
+                <div class="flex items-center gap-3 mb-4">
+                    <span
+                        class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-full text-xs font-bold tracking-wider uppercase">Published:
+                        {{ magazine.publish_date|date:"F Y" }}</span>
+                </div>
+
+                <h1 class="text-3xl md:text-5xl font-space font-bold text-white mb-6 leading-tight">{{ magazine.title }}
+                </h1>
+
+                <div class="prose prose-invert prose-p:text-gray-300 max-w-none mb-8">
+                    <p class="text-lg leading-relaxed">{{ magazine.description }}</p>
+                </div>
+
+                {% if magazine.pdf_file %}
+                <div class="flex flex-wrap gap-4 mt-auto">
+                    <!-- Anchor pointing to the bottom PDF viewer -->
+                    <a href="#pdf-viewer"
+                        class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-medium transition-colors shadow-lg shadow-purple-900/50 flex items-center gap-2">
+                        <i class="fa-solid fa-glasses"></i> Read Online
+                    </a>
+
+                    <a href="{{ magazine.pdf_file.url }}" download
+                        class="px-6 py-3 bg-space-800 hover:bg-space-700 border border-gray-600 text-white rounded-xl font-medium transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-download text-gray-400"></i> Download PDF
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if magazine.pdf_file %}
+        <!-- PDF Viewer Section -->
+        <div id="pdf-viewer" class="scroll-mt-24">
+            <h3 class="text-xl font-space font-bold text-white mb-4 border-l-4 border-purple-500 pl-4">Interactive PDF
+                Viewer</h3>
+            <div class="glass-card rounded-2xl overflow-hidden border border-gray-700 bg-space-900"
+                style="height: 80vh;">
+                <!-- Embedded PDF via iframe -->
+                <iframe src="{{ magazine.pdf_file.url }}#toolbar=0" width="100%" height="100%"
+                    class="border-none bg-white"></iframe>
+            </div>
+            <p class="text-sm text-gray-500 mt-3 text-center">If the PDF doesn't display correctly, you can <a
+                    href="{{ magazine.pdf_file.url }}" download class="text-purple-400 hover:underline">download it</a>
+                to read offline.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

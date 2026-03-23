@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <!-- Background layers -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-40"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-space-900/80 to-space-900"></div>
+        <!-- Animated elements -->
+        <div
+            class="absolute top-[20%] left-[10%] w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[100px] opacity-50 animate-pulse">
+        </div>
+        <div class="absolute top-[30%] right-[10%] w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-pulse"
+            style="animation-delay: 2s;"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+        <div
+            class="inline-block mb-6 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 backdrop-blur-md text-purple-300 font-medium text-sm tracking-wide">
+            <i class="fa-solid fa-sparkles mr-2"></i> Welcome to ASTEC Space Club
+        </div>
+        <h1 class="text-5xl md:text-7xl font-space font-bold text-white mb-6 leading-tight">
+            Explore the <br class="hidden md:block" />
+            <span class="text-gradient">Unknown Cosmic</span> Frontier
+        </h1>
+        <p class="mt-4 text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            Discover the wonders of the universe, connect with fellow space enthusiasts, and access exclusive
+            astronomical content and events.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'events:list' %}"
+                class="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-all shadow-[0_0_20px_rgba(107,70,193,0.5)] hover:shadow-[0_0_30px_rgba(107,70,193,0.7)] flex items-center justify-center gap-2">
+                Explore Events <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="{% url 'magazines:list' %}"
+                class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 hover:bg-white/5 text-white rounded-full font-medium transition-all flex items-center justify-center gap-2">
+                Read Magazines
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Magazines Section -->
+<section class="py-24 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-sm font-bold text-purple-400 tracking-widest uppercase mb-2">Publications</h2>
+                <h3 class="text-3xl md:text-4xl font-space font-bold text-white">Latest <span
+                        class="text-gradient">Magazines</span></h3>
+            </div>
+            <a href="{% url 'magazines:list' %}"
+                class="hidden sm:flex items-center gap-2 text-gray-400 hover:text-white transition">
+                View All <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for magazine in featured_magazines %}
+            <div
+                class="glass-card rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2">
+                <div class="relative h-64 overflow-hidden">
+                    {% if magazine.cover_image %}
+                    <img src="{{ magazine.cover_image.url }}" alt="{{ magazine.title }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    {% else %}
+                    <div class="w-full h-full bg-space-800 flex items-center justify-center">
+                        <i class="fa-solid fa-book-open text-4xl text-gray-600"></i>
+                    </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-space-900 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <span class="text-xs font-semibold bg-purple-600 text-white px-2 py-1 rounded">{{ magazine.publish_date|date:"M Y" }}</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4
+                        class="text-xl font-bold text-white mb-2 font-space line-clamp-1 group-hover:text-purple-400 transition">
+                        {{ magazine.title }}</h4>
+                    <p class="text-gray-400 text-sm mb-6 line-clamp-2">{{ magazine.description }}</p>
+                    <a href="{% url 'magazines:detail' magazine.pk %}"
+                        class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition">
+                        Read Issue <i class="fa-solid fa-book-open-reader text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-space-800 mb-4">
+                    <i class="fa-solid fa-file-excel text-2xl text-gray-500"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2">No Magazines Yet</h4>
+                <p class="text-gray-400">Our latest issues will be published soon.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-8 text-center sm:hidden">
+            <a href="{% url 'magazines:list' %}"
+                class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition">
+                View All Magazines <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Events Section -->
+<section class="py-24 bg-space-800/30 relative z-10 border-y border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-sm font-bold text-blue-400 tracking-widest uppercase mb-2">Attend</h2>
+            <h3 class="text-3xl md:text-4xl font-space font-bold text-white">Upcoming <span
+                    class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">Events</span>
+            </h3>
+        </div>
+
+        <div class="space-y-6">
+            {% for event in upcoming_events %}
+            <div
+                class="glass-card rounded-2xl overflow-hidden group hover:border-blue-500/40 transition-all duration-300">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
+                        {% if event.event_image %}
+                        <img src="{{ event.event_image.url }}" alt="{{ event.title }}"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        {% else %}
+                        <div class="w-full h-full bg-space-700 flex items-center justify-center">
+                            <i class="fa-solid fa-calendar-star text-4xl text-gray-500"></i>
+                        </div>
+                        {% endif %}
+                        <div
+                            class="absolute top-4 left-4 bg-space-900/80 backdrop-blur top-auto bottom-4 md:top-4 md:bottom-auto px-3 py-2 rounded-lg text-center border border-gray-700">
+                            <span class="block text-xs font-bold text-blue-400 uppercase">{{ event.date|date:"M" }}</span>
+                            <span class="block text-xl font-bold text-white leading-none">{{ event.date|date:"d" }}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 md:w-2/3 flex flex-col justify-center">
+                        <div class="flex flex-wrap gap-4 mb-3 text-sm text-gray-400">
+                            <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-blue-500"></i> {{ event.time|time:"g:i A" }}</span>
+                            <span class="flex items-center gap-1.5"><i
+                                    class="fa-solid fa-location-dot text-red-500"></i> {{ event.location }}</span>
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-3 font-space group-hover:text-blue-400 transition">
+                            {{ event.title }}</h4>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-2 md:line-clamp-3">{{ event.description }}</p>
+
+                        <div class="mt-auto">
+                            <a href="{% url 'events:detail' event.pk %}"
+                                class="px-6 py-2.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 rounded-lg font-medium transition-all inline-flex items-center gap-2">
+                                Register Now <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-12 glass-card rounded-2xl">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-space-800 mb-4">
+                    <i class="fa-regular fa-calendar-xmark text-2xl text-gray-500"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2">No Upcoming Events</h4>
+                <p class="text-gray-400">Check back later for new astronomical events and gatherings.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if upcoming_events %}
+        <div class="mt-12 text-center">
+            <a href="{% url 'events:list' %}"
+                class="inline-block px-8 py-3 glass-card hover:bg-white/5 text-white rounded-full font-medium transition-all group">
+                View Event Calendar <i
+                    class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-24 relative z-10 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-space-900 via-purple-900/20 to-space-900"></div>
+    <div
+        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 glass-card p-12 rounded-3xl border-purple-500/20">
+        <i class="fa-solid fa-meteor text-5xl text-purple-500 mb-6 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
+        <h2 class="text-3xl md:text-5xl font-space font-bold text-white mb-6">Ready to Look Up?</h2>
+        <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            Become a part of the experience. Connect with astronomers, attend exclusive events, and access our
+            premium magazine publications.
+        </p>
+        <a href="{% url 'events:list' %}"
+            class="px-10 py-5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white rounded-full font-bold text-lg transition-all shadow-[0_0_30px_rgba(107,70,193,0.4)] hover:shadow-[0_0_40px_rgba(107,70,193,0.6)] transform hover:-translate-y-1 inline-flex items-center justify-center gap-3">
+            Explore Upcoming Events
+        </a>
+    </div>
+</section>
+{% endblock %}

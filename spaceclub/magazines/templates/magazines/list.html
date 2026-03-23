@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Magazines - ASTEC Space Club{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="py-16 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-space font-bold text-white mb-4">Space Club <span
+                class="text-gradient">Publications</span></h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto">Explore our collection of space science magazines, research
+            papers, and club newsletters.</p>
+    </div>
+</section>
+
+<!-- Magazine Grid -->
+<section class="py-12 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for magazine in magazines %}
+            <div
+                class="glass-card rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all duration-300 flex flex-col h-full">
+                <div class="relative h-72 overflow-hidden">
+                    {% if magazine.cover_image %}
+                    <img src="{{ magazine.cover_image.url }}" alt="{{ magazine.title }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    {% else %}
+                    <div class="w-full h-full bg-space-800 flex items-center justify-center">
+                        <i class="fa-solid fa-journal-whills text-5xl text-gray-600"></i>
+                    </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-space-900 to-transparent"></div>
+                    <div class="absolute top-4 right-4">
+                        <span
+                            class="bg-space-900/80 backdrop-blur text-purple-400 text-xs font-bold px-3 py-1.5 rounded-full border border-purple-500/30">{{ magazine.publish_date|date:"F Y" }}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 flex-grow flex flex-col">
+                    <h2 class="text-2xl font-bold text-white mb-3 font-space group-hover:text-purple-400 transition">{{ magazine.title }}</h2>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">{{ magazine.description }}</p>
+
+                    <div class="mt-auto grid grid-cols-2 gap-3">
+                        <a href="{% url 'magazines:detail' magazine.pk %}"
+                            class="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl font-medium transition-colors text-sm">
+                            <i class="fa-solid fa-book-open"></i> Read PDF
+                        </a>
+                        {% if magazine.pdf_file %}
+                        <a href="{{ magazine.pdf_file.url }}" download
+                            class="flex items-center justify-center gap-2 bg-space-700 hover:bg-space-600 text-gray-200 border border-gray-600 px-4 py-2.5 rounded-xl font-medium transition-colors text-sm">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full py-20 text-center glass-card rounded-3xl">
+                <div class="w-20 h-20 bg-space-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-book-journal-whills text-3xl text-gray-500"></i>
+                </div>
+                <h3 class="text-2xl font-space font-bold text-white mb-3">No Publications Yet</h3>
+                <p class="text-gray-400 max-w-md mx-auto">There are currently no magazines available in our library.
+                    Check back later for new releases.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ASTEC Space Club{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            900: '#0B0B1A',
+                            800: '#15152A',
+                            700: '#1F1F3D',
+                            accent: '#6B46C1',
+                            light: '#C4B5FD',
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')",
+                        'stars': "url('https://www.transparenttextures.com/patterns/stardust.png')",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B0B1A;
+            color: #F8FAFC;
+        }
+
+        .glass-card {
+            background: rgba(31, 31, 61, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #C4B5FD, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-space-900 bg-stars bg-fixed flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-card bg-opacity-80 py-4" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{% url 'core:home' %}"
+                        class="font-space font-bold text-2xl text-white tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-rocket text-purple-500"></i> ASTEC
+                    </a>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="{% url 'core:home' %}"
+                        class="text-gray-300 hover:text-white transition font-medium">Home</a>
+                    <a href="{% url 'core:about' %}"
+                        class="text-gray-300 hover:text-white transition font-medium">About</a>
+                    <a href="{% url 'magazines:list' %}"
+                        class="text-gray-300 hover:text-white transition font-medium">Magazines</a>
+                    <a href="{% url 'events:list' %}"
+                        class="text-gray-300 hover:text-white transition font-medium">Events</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-gray-300 hover:text-white focus:outline-none" id="mobile-menu-button">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden glass-card absolute w-full left-0 top-full" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{% url 'core:home' %}"
+                    class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Home</a>
+                <a href="{% url 'core:about' %}"
+                    class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">About</a>
+                <a href="{% url 'magazines:list' %}"
+                    class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Magazines</a>
+                <a href="{% url 'events:list' %}"
+                    class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white">Events</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Messages -->
+    {% if messages %}
+    <div class="fixed top-24 right-4 z-50 flex flex-col gap-2">
+        {% for message in messages %}
+        <div
+            class="glass-card px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in-down border-l-4 
+            {% if message.tags == 'error' %}border-red-500 text-red-100{% elif message.tags == 'success' %}border-green-500 text-green-100{% else %}border-blue-500 text-blue-100{% endif %}">
+            <i
+                class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation text-red-500{% elif message.tags == 'success' %}fa-check-circle text-green-500{% else %}fa-info-circle text-blue-500{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Main Content -->
+    <main class="flex-grow pt-20">
+        {% block content %}{% endblock %}
+    </main>
+    <!-- Footer -->
+    <footer class="bg-space-800 border-t border-gray-800 mt-20 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="#"
+                        class="font-space font-bold text-2xl text-white tracking-wider flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-rocket text-purple-500"></i> ASTEC
+                    </a>
+                    <p class="text-gray-400 max-w-md">Exploring the cosmos, discovering the unknown. Join the official
+                        space club to expand your astronomical horizons.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-space font-semibold mb-4 text-lg">Quick Links</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{% url 'core:home' %}" class="hover:text-purple-400 transition">Home</a></li>
+                        <li><a href="{% url 'core:about' %}" class="hover:text-purple-400 transition">About Us</a></li>
+                        <li><a href="{% url 'magazines:list' %}" class="hover:text-purple-400 transition">Magazines</a>
+                        </li>
+                        <li><a href="{% url 'events:list' %}" class="hover:text-purple-400 transition">Events</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-space font-semibold mb-4 text-lg">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="text-gray-400 hover:text-white transition bg-space-700 w-10 h-10 rounded-full flex items-center justify-center"><i
+                                class="fa-brands fa-twitter"></i></a>
+                        <a href="#"
+                            class="text-gray-400 hover:text-white transition bg-space-700 w-10 h-10 rounded-full flex items-center justify-center"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="#"
+                            class="text-gray-400 hover:text-white transition bg-space-700 w-10 h-10 rounded-full flex items-center justify-center"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-space-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm">&copy; ASTEC Space Club. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex gap-4 text-sm text-gray-500">
+                    <a href="/admin" class="hover:text-white transition">Admin Portal</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function () {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-lg', 'bg-space-900', 'bg-opacity-95');
+                navbar.classList.remove('bg-opacity-80');
+            } else {
+                navbar.classList.remove('shadow-lg', 'bg-space-900', 'bg-opacity-95');
+                navbar.classList.add('bg-opacity-80');
+            }
+        });
+    </script>
+</body>
+
+</html>
