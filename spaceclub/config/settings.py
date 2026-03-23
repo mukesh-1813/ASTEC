@@ -140,6 +140,9 @@ CSRF_TRUSTED_ORIGINS = os.environ.get(
 
 # WhiteNoise compressed static files
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
